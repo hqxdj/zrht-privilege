@@ -1,0 +1,6 @@
+com\zrht\privilege\PrivilegeApplication.class
+com\zrht\privilege\service\ConfigInfoService.class
+com\zrht\privilege\dao\ConfigInfoDao.class
+com\zrht\privilege\entity\ConfigInfo.class
+com\zrht\privilege\controller\ConfigInfoController.class
+com\zrht\privilege\service\impl\ConfigInfoServiceImpl.class
