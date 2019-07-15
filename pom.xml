@@ -31,6 +31,11 @@
 			<groupId>com.baomidou</groupId>
 			<artifactId>mybatis-plus-boot-starter</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.baomidou</groupId>
+			<artifactId>mybatis-plus-generator</artifactId>
+			<version>${mybatis-plus-generator-version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>com.cloud</groupId>
