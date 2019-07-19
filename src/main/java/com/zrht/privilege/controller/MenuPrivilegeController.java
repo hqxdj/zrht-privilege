@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * 前端控制器
+ *  前端控制器
  * </p>
  *
  * @author xdj
- * @since 2019-07-15
+ * @since 2019-07-19
  */
 @RestController
 @RequestMapping("/menuPrivilege")

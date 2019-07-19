@@ -17,7 +17,7 @@ import java.util.Date;
  * </p>
  *
  * @author xdj
- * @since 2019-07-15
+ * @since 2019-07-19
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -27,14 +27,17 @@ public class Menu implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
+
     /**
      * 菜单id
      */
-    @TableId(value = "menu_id", type = IdType.AUTO)
-    private Integer menuId;
+    @TableField("menu_id")
+    private String menuId;
 
     /**
-     * 菜单名称
+     *  菜单名称
      */
     @TableField("menu_name")
     private String menuName;
@@ -49,35 +52,22 @@ public class Menu implements Serializable {
      * 父类菜单id
      */
     @TableField("parent_menu_id")
-    private Integer parentMenuId;
-
-    @TableField("ver")
-    private String ver;
+    private String parentMenuId;
 
     @TableField("create_id")
-    private Integer createId;
+    private String createId;
 
     @TableField("create_date")
     private Date createDate;
 
     @TableField("upate_id")
-    private Integer upateId;
+    private String upateId;
 
     @TableField("udate_date")
     private Date udateDate;
 
-    @TableField("etc1")
-    private String etc1;
 
-    @TableField("etc2")
-    private String etc2;
-
-    @TableField("etc3")
-    private String etc3;
-
-    @TableField("etc4")
-    private String etc4;
-
+    public static final String ID = "id";
 
     public static final String MENU_ID = "menu_id";
 
@@ -87,8 +77,6 @@ public class Menu implements Serializable {
 
     public static final String PARENT_MENU_ID = "parent_menu_id";
 
-    public static final String VER = "ver";
-
     public static final String CREATE_ID = "create_id";
 
     public static final String CREATE_DATE = "create_date";
@@ -96,13 +84,5 @@ public class Menu implements Serializable {
     public static final String UPATE_ID = "upate_id";
 
     public static final String UDATE_DATE = "udate_date";
-
-    public static final String ETC1 = "etc1";
-
-    public static final String ETC2 = "etc2";
-
-    public static final String ETC3 = "etc3";
-
-    public static final String ETC4 = "etc4";
 
 }

@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- * 服务实现类
+ *  服务实现类
  * </p>
  *
  * @author xdj
- * @since 2019-07-15
+ * @since 2019-07-19
  */
 @Service
 public class MenuPrivilegeServiceImpl extends ServiceImpl<MenuPrivilegeDao, MenuPrivilege> implements MenuPrivilegeService {

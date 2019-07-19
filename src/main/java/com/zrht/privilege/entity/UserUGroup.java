@@ -17,7 +17,7 @@ import java.util.Date;
  * </p>
  *
  * @author xdj
- * @since 2019-07-15
+ * @since 2019-07-19
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -27,26 +27,26 @@ public class UserUGroup implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
+
     /**
      * 关系id
      */
-    @TableId(value = "user_relation_id", type = IdType.AUTO)
-    private Integer userRelationId;
+    @TableField("user_relation_id")
+    private String userRelationId;
 
     /**
      * 用户id
      */
     @TableField("user_id")
-    private Integer userId;
+    private String userId;
 
     /**
      * 用户组id
      */
     @TableField("user_group_id")
-    private Integer userGroupId;
-
-    @TableField("ver")
-    private String ver;
+    private String userGroupId;
 
     @TableField("create_date")
     private Date createDate;
@@ -60,26 +60,14 @@ public class UserUGroup implements Serializable {
     @TableField("update_id")
     private Integer updateId;
 
-    @TableField("etc1")
-    private String etc1;
 
-    @TableField("etc2")
-    private String etc2;
-
-    @TableField("etc3")
-    private String etc3;
-
-    @TableField("etc4")
-    private String etc4;
-
+    public static final String ID = "id";
 
     public static final String USER_RELATION_ID = "user_relation_id";
 
     public static final String USER_ID = "user_id";
 
     public static final String USER_GROUP_ID = "user_group_id";
-
-    public static final String VER = "ver";
 
     public static final String CREATE_DATE = "create_date";
 
@@ -88,13 +76,5 @@ public class UserUGroup implements Serializable {
     public static final String UPDATE_DATE = "update_date";
 
     public static final String UPDATE_ID = "update_id";
-
-    public static final String ETC1 = "etc1";
-
-    public static final String ETC2 = "etc2";
-
-    public static final String ETC3 = "etc3";
-
-    public static final String ETC4 = "etc4";
 
 }

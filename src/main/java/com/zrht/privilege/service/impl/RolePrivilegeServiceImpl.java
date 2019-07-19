@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author xdj
- * @since 2019-07-15
+ * @since 2019-07-19
  */
 @Service
 public class RolePrivilegeServiceImpl extends ServiceImpl<RolePrivilegeDao, RolePrivilege> implements RolePrivilegeService {

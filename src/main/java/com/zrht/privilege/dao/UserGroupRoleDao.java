@@ -9,7 +9,7 @@ import com.zrht.privilege.entity.UserGroupRole;
  * </p>
  *
  * @author xdj
- * @since 2019-07-15
+ * @since 2019-07-19
  */
 public interface UserGroupRoleDao extends BaseMapper<UserGroupRole> {
 

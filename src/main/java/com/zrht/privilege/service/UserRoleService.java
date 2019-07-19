@@ -9,7 +9,7 @@ import com.zrht.privilege.entity.UserRole;
  * </p>
  *
  * @author xdj
- * @since 2019-07-15
+ * @since 2019-07-19
  */
 public interface UserRoleService extends IService<UserRole> {
 

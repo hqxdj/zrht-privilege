@@ -5,11 +5,11 @@ import com.zrht.privilege.entity.MenuPrivilege;
 
 /**
  * <p>
- * Mapper 接口
+ *  Mapper 接口
  * </p>
  *
  * @author xdj
- * @since 2019-07-15
+ * @since 2019-07-19
  */
 public interface MenuPrivilegeDao extends BaseMapper<MenuPrivilege> {
 

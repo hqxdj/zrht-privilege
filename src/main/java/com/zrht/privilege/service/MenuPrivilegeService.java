@@ -5,11 +5,11 @@ import com.zrht.privilege.entity.MenuPrivilege;
 
 /**
  * <p>
- * 服务类
+ *  服务类
  * </p>
  *
  * @author xdj
- * @since 2019-07-15
+ * @since 2019-07-19
  */
 public interface MenuPrivilegeService extends IService<MenuPrivilege> {
 

@@ -1,8 +1,6 @@
 package com.zrht.privilege.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,7 +15,7 @@ import java.util.Date;
  * </p>
  *
  * @author xdj
- * @since 2019-07-15
+ * @since 2019-07-19
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -30,8 +28,8 @@ public class Privilege implements Serializable {
     /**
      * 权限id
      */
-    @TableId(value = "privilege_id", type = IdType.AUTO)
-    private Integer privilegeId;
+    @TableField("privilege_id")
+    private String privilegeId;
 
     /**
      * 权限类型
@@ -49,7 +47,7 @@ public class Privilege implements Serializable {
      * 创建者id
      */
     @TableField("create_id")
-    private Integer createId;
+    private String createId;
 
     /**
      * 创建时间
@@ -61,31 +59,13 @@ public class Privilege implements Serializable {
      * 更新者id
      */
     @TableField("update_id")
-    private Integer updateId;
+    private String updateId;
 
     /**
      * 更新时间
      */
     @TableField("update_date")
     private Date updateDate;
-
-    /**
-     * 版本
-     */
-    @TableField("ver")
-    private Integer ver;
-
-    @TableField("etc1")
-    private String etc1;
-
-    @TableField("etc2")
-    private String etc2;
-
-    @TableField("etc3")
-    private String etc3;
-
-    @TableField("etc4")
-    private String etc4;
 
 
     public static final String PRIVILEGE_ID = "privilege_id";
@@ -101,15 +81,5 @@ public class Privilege implements Serializable {
     public static final String UPDATE_ID = "update_id";
 
     public static final String UPDATE_DATE = "update_date";
-
-    public static final String VER = "ver";
-
-    public static final String ETC1 = "etc1";
-
-    public static final String ETC2 = "etc2";
-
-    public static final String ETC3 = "etc3";
-
-    public static final String ETC4 = "etc4";
 
 }

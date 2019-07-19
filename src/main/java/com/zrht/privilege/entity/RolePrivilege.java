@@ -1,6 +1,5 @@
 package com.zrht.privilege.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -17,7 +16,7 @@ import java.util.Date;
  * </p>
  *
  * @author xdj
- * @since 2019-07-15
+ * @since 2019-07-19
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -27,20 +26,23 @@ public class RolePrivilege implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "role_privilege_id", type = IdType.AUTO)
-    private Integer rolePrivilegeId;
+    @TableId("id")
+    private Integer id;
+
+    @TableField("role_privilege_id")
+    private String rolePrivilegeId;
 
     @TableField("role_id")
-    private Integer roleId;
+    private String roleId;
 
     @TableField("privilege_id")
-    private Integer privilegeId;
+    private String privilegeId;
 
     /**
      * 创建者id
      */
     @TableField("create_id")
-    private Integer createId;
+    private String createId;
 
     /**
      * 创建时间
@@ -52,7 +54,7 @@ public class RolePrivilege implements Serializable {
      * 更新者id
      */
     @TableField("update_id")
-    private Integer updateId;
+    private String updateId;
 
     /**
      * 更新时间
@@ -60,24 +62,8 @@ public class RolePrivilege implements Serializable {
     @TableField("update_date")
     private Date updateDate;
 
-    /**
-     * 版本
-     */
-    @TableField("ver")
-    private Integer ver;
 
-    @TableField("etc2")
-    private String etc2;
-
-    @TableField("etc1")
-    private String etc1;
-
-    @TableField("etc3")
-    private String etc3;
-
-    @TableField("etc4")
-    private String etc4;
-
+    public static final String ID = "id";
 
     public static final String ROLE_PRIVILEGE_ID = "role_privilege_id";
 
@@ -92,15 +78,5 @@ public class RolePrivilege implements Serializable {
     public static final String UPDATE_ID = "update_id";
 
     public static final String UPDATE_DATE = "update_date";
-
-    public static final String VER = "ver";
-
-    public static final String ETC2 = "etc2";
-
-    public static final String ETC1 = "etc1";
-
-    public static final String ETC3 = "etc3";
-
-    public static final String ETC4 = "etc4";
 
 }

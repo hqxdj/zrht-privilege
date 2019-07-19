@@ -9,7 +9,7 @@ import com.zrht.privilege.entity.Privilege;
  * </p>
  *
  * @author xdj
- * @since 2019-07-15
+ * @since 2019-07-19
  */
 public interface PrivilegeService extends IService<Privilege> {
 
