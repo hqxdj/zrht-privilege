@@ -1,6 +1,8 @@
 package com.zrht.privilege.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,6 +26,9 @@ import java.util.Date;
 public class Privilege implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
 
     /**
      * 权限id
@@ -67,6 +72,7 @@ public class Privilege implements Serializable {
     @TableField("update_date")
     private Date updateDate;
 
+    public static final String ID = "id";
 
     public static final String PRIVILEGE_ID = "privilege_id";
 

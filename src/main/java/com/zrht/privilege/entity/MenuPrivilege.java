@@ -54,10 +54,10 @@ public class MenuPrivilege implements Serializable {
     @TableField("create_date")
     private Date createDate;
 
-    @TableField("upadte_id")
-    private String upadteId;
+    @TableField("update_id")
+    private String updateId;
 
-    @TableField(" update_date")
+    @TableField("update_date")
     private Date updateDate;
 
 
@@ -73,8 +73,8 @@ public class MenuPrivilege implements Serializable {
 
     public static final String CREATE_DATE = "create_date";
 
-    public static final String UPADTE_ID = "upadte_id";
+    public static final String UPDATE_ID = "update_id";
 
-    public static final String UPDATE_DATE = " update_date";
+    public static final String UPDATE_DATE = "update_date";
 
 }
