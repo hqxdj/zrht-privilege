@@ -1,13 +1,15 @@
 package com.zrht.privilege.realm;
 
 import com.cloud.common.context.AppContext;
-import com.cloud.common.exception.ParameterException;
 import com.zrht.privilege.dto.UserInfoParamDTO;
 import com.zrht.privilege.entity.*;
+import com.zrht.privilege.enums.ExceptionEnum;
+import com.zrht.privilege.enums.YesOrNoEnum;
+import com.zrht.privilege.exception.PrivilegeException;
 import com.zrht.privilege.service.*;
+import com.zrht.privilege.utils.AssertUtil;
 import com.zrht.privilege.utils.UserInfoUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -16,6 +18,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,14 +40,11 @@ public class CustomRealm extends AuthorizingRealm {
         // 获取当前登录角色的信息也可以在用户认证的时候传入UserInfoParamDTO这个对象
 //        UserInfoParamDTO user = (UserInfoParamDTO) principals.getPrimaryPrincipal();
         UserInfoParamDTO user = UserInfoUtil.getlocal();
-        if (user == null) {
-            return simpleAuthorizationInfo;
-        }
+        AssertUtil.notNull(user, new PrivilegeException(ExceptionEnum.ROLE_INFO_IS_NULL.getCode(), ExceptionEnum.ROLE_INFO_IS_NULL.getMessage()));
         // 获取角色的权限信息
         String roleId = user.getRoleId();
-        if (StringUtils.isEmpty(roleId)) {
-            throw new ParameterException("当前用户没有角色信息");
-        }
+
+        AssertUtil.notEmpty(roleId, new PrivilegeException(ExceptionEnum.ROLE_INFO_IS_NULL.getCode(), ExceptionEnum.ROLE_INFO_IS_NULL.getMessage()));
         RoleInfoService roleInfoService = AppContext.getBean(RoleInfoService.class);
         RolePrivilegeService rolePrivilegeService = AppContext.getBean(RolePrivilegeService.class);
         MenuPrivilegeService menuPrivilegeService = AppContext.getBean(MenuPrivilegeService.class);
@@ -52,8 +52,13 @@ public class CustomRealm extends AuthorizingRealm {
 
         // 依次通过角色id->获取权限id->获取菜单id->获取权限URL
         RoleInfo roleInfo = roleInfoService.query().eq("role_id", roleId).one();
+
+        AssertUtil.notNull(roleInfo, new PrivilegeException(ExceptionEnum.ROLE_INFO_IS_NULL.getCode(), ExceptionEnum.ROLE_INFO_IS_NULL.getMessage()));
+
         // 获取权限列表
         List<RolePrivilege> rolePrivileges = rolePrivilegeService.query().eq("role_id", roleId).list();
+        AssertUtil.notNull(rolePrivileges, new PrivilegeException(ExceptionEnum.ROLE_INFO_IS_NULL.getCode(), ExceptionEnum.ROLE_INFO_IS_NULL.getMessage()));
+
         List<String> privilegeIds = rolePrivileges.stream()
                 .map(RolePrivilege::getPrivilegeId).collect(Collectors.toList());
         List<MenuPrivilege> lists = menuPrivilegeService.query().in("privilege_id", privilegeIds).list();
@@ -66,6 +71,7 @@ public class CustomRealm extends AuthorizingRealm {
         return simpleAuthorizationInfo;
     }
 
+
     /**
      * @param [token]
      * @return org.apache.shiro.authc.AuthenticationInfo
@@ -75,17 +81,16 @@ public class CustomRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+
         UserInfoService userService = AppContext.getBean(UserInfoService.class);
         String userName = (String) token.getPrincipal();
         UserInfo user = userService.query().eq("login_name", userName).one();
-        if (user == null) {
-            return null;
-        }
+        AssertUtil.notNull(user, new PrivilegeException(ExceptionEnum.USER_INFO_IS_NULL.getCode(), ExceptionEnum.USER_INFO_IS_NULL.getMessage()));
         //3.通过SimpleAuthenticationInfo做身份处理
-        SimpleAuthenticationInfo simpleAuthenticationInfo =
-                new SimpleAuthenticationInfo(user, user.getPassword(), getName());
+        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(user, user.getPassword(), getName());
+        simpleAuthenticationInfo.setCredentialsSalt(ByteSource.Util.bytes("zrht"));
         //4.用户账号状态验证等其他业务操作
-        if (user.getAvailable() == 1) {
+        if (user.getAvailable().equals(YesOrNoEnum.NO.getCode())) {
             throw new AuthenticationException("该账号已经被禁用");
         }
         //5.返回身份处理对象

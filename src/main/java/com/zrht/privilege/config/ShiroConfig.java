@@ -1,6 +1,7 @@
 package com.zrht.privilege.config;
 
 import com.zrht.privilege.realm.CustomRealm;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -59,12 +60,21 @@ public class ShiroConfig {
     @Bean
     public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        securityManager.setRealm(new CustomRealm());
+        securityManager.setRealm(customRealm());
         return securityManager;
     }
 
     @Bean
+    public HashedCredentialsMatcher hashedCredentialsMatcher() {
+        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher("md5");
+        hashedCredentialsMatcher.setHashIterations(2);
+        return hashedCredentialsMatcher;
+    }
+
+    @Bean
     public CustomRealm customRealm() {
-        return new CustomRealm();
+        CustomRealm customRealm = new CustomRealm();
+        customRealm.setCredentialsMatcher(hashedCredentialsMatcher());
+        return customRealm;
     }
 }

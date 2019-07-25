@@ -3,7 +3,7 @@ package com.zrht.privilege.enums;
 /**
  * 用于定义返回结果信息的枚举值
  */
-public enum ResponseCode {
+public enum ResponseCodeEnum {
     RESPONSE_CODE_FAILURE(10000, "请求失败、结果处理失败"),
     RESPONSE_CODE_SUCCESS(10001, "请求成功、结果处理成功"),
     RESPONSE_CODE_PARAM_FORMAT_ERROR(10002, "请求失败、参数格式错误"),
@@ -23,7 +23,7 @@ public enum ResponseCode {
     private Integer code;
     private String message;
 
-    ResponseCode(Integer code, String message) {
+    ResponseCodeEnum(Integer code, String message) {
         this.code = code;
         this.message = message;
     }

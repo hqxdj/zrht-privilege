@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 public class ApplicationContextProvider implements ApplicationContextAware {
     /**
      * 用于在普通类中获取spring-context管理的bean的工具
+     * common类中有这个类了
      */
 
     private static ApplicationContext applicationContext;
