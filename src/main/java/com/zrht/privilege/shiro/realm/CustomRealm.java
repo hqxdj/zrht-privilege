@@ -1,5 +1,6 @@
-package com.zrht.privilege.realm;
+package com.zrht.privilege.shiro.realm;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.cloud.common.context.AppContext;
 import com.zrht.privilege.dto.UserInfoParamDTO;
 import com.zrht.privilege.entity.*;
@@ -7,8 +8,8 @@ import com.zrht.privilege.enums.ExceptionEnum;
 import com.zrht.privilege.enums.YesOrNoEnum;
 import com.zrht.privilege.exception.PrivilegeException;
 import com.zrht.privilege.service.*;
+import com.zrht.privilege.shiro.util.ShiroUtil;
 import com.zrht.privilege.utils.AssertUtil;
-import com.zrht.privilege.utils.UserInfoUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -17,10 +18,12 @@ import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -38,12 +41,19 @@ public class CustomRealm extends AuthorizingRealm {
         //通过SimpleAuthenticationInfo做授权
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         // 获取当前登录角色的信息也可以在用户认证的时候传入UserInfoParamDTO这个对象
-//        UserInfoParamDTO user = (UserInfoParamDTO) principals.getPrimaryPrincipal();
-        UserInfoParamDTO user = UserInfoUtil.getlocal();
-        AssertUtil.notNull(user, new PrivilegeException(ExceptionEnum.ROLE_INFO_IS_NULL.getCode(), ExceptionEnum.ROLE_INFO_IS_NULL.getMessage()));
-        // 获取角色的权限信息
-        String roleId = user.getRoleId();
+        UserInfoParamDTO user = (UserInfoParamDTO) principals.getPrimaryPrincipal();
+//        UserInfoParamDTO user = UserInfoUtil.getlocal();
+        //这里如果使用了shiro的session则无法使用UserIfoUtil
 
+//        AssertUtil.notNull(user, new PrivilegeException(ExceptionEnum.ROLE_INFO_IS_NULL.getCode(), ExceptionEnum.ROLE_INFO_IS_NULL.getMessage()));
+        // 获取角色的权限信息
+//        String roleId = user.getRoleId();
+        // 通过获取session中的用户角色id来获取权限信息
+        Session session = ShiroUtil.getSessionByUsername(user.getUserName());
+        UserInfoParamDTO DTO = (UserInfoParamDTO) Objects.requireNonNull(session).getAttribute("user");
+
+
+        String roleId = DTO.getRoleId();
         AssertUtil.notEmpty(roleId, new PrivilegeException(ExceptionEnum.ROLE_INFO_IS_NULL.getCode(), ExceptionEnum.ROLE_INFO_IS_NULL.getMessage()));
         RoleInfoService roleInfoService = AppContext.getBean(RoleInfoService.class);
         RolePrivilegeService rolePrivilegeService = AppContext.getBean(RolePrivilegeService.class);
@@ -87,7 +97,9 @@ public class CustomRealm extends AuthorizingRealm {
         UserInfo user = userService.query().eq("login_name", userName).one();
         AssertUtil.notNull(user, new PrivilegeException(ExceptionEnum.USER_INFO_IS_NULL.getCode(), ExceptionEnum.USER_INFO_IS_NULL.getMessage()));
         //3.通过SimpleAuthenticationInfo做身份处理
-        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(user, user.getPassword(), getName());
+        UserInfoParamDTO userInfoParamDTO = new UserInfoParamDTO();
+        BeanUtil.copyProperties(user, userInfoParamDTO);
+        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(userInfoParamDTO, userInfoParamDTO.getPassword(), getName());
         simpleAuthenticationInfo.setCredentialsSalt(ByteSource.Util.bytes("zrht"));
         //4.用户账号状态验证等其他业务操作
         if (user.getAvailable().equals(YesOrNoEnum.NO.getCode())) {
