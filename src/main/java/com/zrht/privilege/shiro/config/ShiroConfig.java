@@ -3,6 +3,7 @@ package com.zrht.privilege.shiro.config;
 import com.zrht.privilege.shiro.realm.CustomRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
@@ -30,8 +31,9 @@ public class ShiroConfig {
         Map<String, String> filterChainMap = new LinkedHashMap<>(16);
 
         //authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问,先配置anon再配置authc。
-        filterChainMap.put("/login", "anon");
-        filterChainMap.put("/menu", "anon");
+//        filterChainMap.put("/logout", "anon");
+        filterChainMap.put("/access", "perms");
+//        filterChainMap.put("/menu", "anon");
         filterChainMap.put("/**", "authc");
 
         //设置拦截请求后跳转的URL.
@@ -132,8 +134,13 @@ public class ShiroConfig {
     @Bean
     public DefaultWebSessionManager sessionManager() {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        sessionManager.setCacheManager(redisCacheManager());
         sessionManager.setSessionDAO(redisSessionDAO());
         return sessionManager;
     }
 
+    @Bean
+    public LifecycleBeanPostProcessor getLifecycleBeanPostProcessor() {
+        return new LifecycleBeanPostProcessor();
+    }
 }

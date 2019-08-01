@@ -4,25 +4,22 @@ import com.cloud.common.bean.ResponseInfo;
 import com.cloud.common.controller.BaseController;
 import com.cloud.common.util.ResultUtils;
 import com.zrht.privilege.dto.UserInfoParamDTO;
+import com.zrht.privilege.shiro.CustomUsernamePasswordToken;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpSession;
 
 @Slf4j
 @RestController
 public class LoginController extends BaseController {
 
     /**
-     * @param [UserInfoParamDTO]
+     * @param
      * @return com.zrht.privilege.common.Response
      * @author xdj
      * @data 2019/7/22
@@ -30,9 +27,9 @@ public class LoginController extends BaseController {
     @PostMapping("/login")
     public ResponseInfo login(@RequestBody UserInfoParamDTO user) {
 
-        HttpSession session = request.getSession();
-        session.setAttribute("user", user);
-        UsernamePasswordToken token = new UsernamePasswordToken(user.getLoginName(), user.getPassword());
+//        HttpSession session = request.getSession();
+//        session.setAttribute("user", user);
+        CustomUsernamePasswordToken token = new CustomUsernamePasswordToken(user.getLoginName(), user.getPassword().toCharArray(), user.getRoleId());
         Subject subject = SecurityUtils.getSubject();
         try {
             subject.login(token);
@@ -46,8 +43,8 @@ public class LoginController extends BaseController {
 
     @PostMapping("/access")
     @RequiresPermissions("/access")
-    @RequiresRoles("headquarter")
     public ResponseInfo access() {
+        System.out.println("access success");
         return ResultUtils.success();
     }
 
